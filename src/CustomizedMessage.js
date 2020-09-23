@@ -11,61 +11,60 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons';
 
 const CustomizedMessage =(props)=>{
 
+  /* selects' options */
+  const customizedOptions=[]
   const options=optionMessages;
- 
-    const[datosCliente, setDatosCliente]=useState({
+
+  /* state hooks */
+  const[value,setValue]=useState('');
+  const[copied,setCopied]=useState(false);
+  const [selectedOption, setSelectedOption] = useState({value:options.value});
+  const[customizedOption, setCustomizedOption]=useState({value:options.value})
+  const[datosCliente, setDatosCliente]=useState({
         nombre:'',
         dia:'',
         hora:'',
         monto:''
       });  
+  const[parrafo, setParrafo]=useState({
+    parrafo:''
+  });
+  const [mode,setMode]=useState('template');
 
-     const customizedOptions=[]
-      const handleChange=(event)=>{
-        setDatosCliente({
-          ...datosCliente,
-         [ event.target.name]:event.target.value
-        })
-        console.log(datosCliente);
-      }
-    
-      const[parrafo, setParrafo]=useState({
-        parrafo:''
-      });
-    
-      const handleParrafo=(event)=>{
-        setParrafo({  
-          parrafo:event.target.innerText
-        });
-    
-      }
-    
-    const[value,setValue]=useState('');
-    const[copied,setCopied]=useState(false);
+  /* handlers */
+  const handleChange=(event)=>{
+    setDatosCliente({
+      ...datosCliente,
+      [ event.target.name]:event.target.value
+    })
+    console.log(datosCliente);
+  }
 
-    const handleCopy=(event)=>{
-        handleParrafo(event);
-        setValue(
-        event.target.value
-        )
-        console.log(parrafo)
-    }     
+  const handleParrafo=(event)=>{
+    setParrafo({  
+      parrafo:event.target.innerText
+    });
+  } 
+  
+  const handleCopy=(event)=>{
+      handleParrafo(event);
+      setValue(
+      event.target.value
+      )
+      console.log(parrafo)
+  }     
 
-    const [selectedOption, setSelectedOption] = useState({value:options.value});
-    const[customizedOption, setCustomizedOption]=useState({value:options.value})
-
-    const handleSelection=(e)=>{
-      setSelectedOption({
-        ...options.value,
-        value:e.target.value});
-      console.log(selectedOption);
-    }
-
-
-    const [mode,setMode]=useState('template');
+  const handleSelection=(e)=>{
+    setSelectedOption({
+      ...options.value,
+      value:e.target.value});
+    console.log(selectedOption);
+  }
 
         return (
           <div style={{witdh:'20vw'}}>
+
+          {/* user's inputs */}
             <Form className={"p-4 row m-4 bg-light rounded"} >
               <div className={"row pl-2  ml-2"}>
                 <Form.Label >Cliente</Form.Label>
@@ -85,6 +84,7 @@ const CustomizedMessage =(props)=>{
               </div>
               </Form>
 
+          {/* mode toggle */}
               <div className={"p-4 row ml-4 mb-4 mr-4 mt-1 bg-light rounded"} >
               <ToggleButtonGroup  className={"bg-dark"}type="checkbox" value={[1, 2]} className="mb-2">
                 <ToggleButton onClick={()=>setMode('template')}value={1}>Plantilla</ToggleButton>
@@ -93,33 +93,36 @@ const CustomizedMessage =(props)=>{
              </div>
              {console.log(mode)}
 
+          {/* selects */}
           <div className={"bg-primary text-white m-4  rounded p-4 row"}>
             <Navbar.Brand>Trámite</Navbar.Brand>
-           {  mode==='template'? <Form.Control as="select" 
+           {  mode==='template'? 
+           /* template's select */
+           <Form.Control as="select" 
                 value={selectedOption.select}
                 style={{width:'50%'}}
                 onChange={handleSelection}
                 className={"ml-4 mt-1"}
-                display={selectedOption}
-                >
+                display={selectedOption}>
+
                 {options.map(o => (
                   <option className={"p-4 m-4"}value={o.value}>{o.label}</option>
                 ))}
-              </Form.Control> :
-
-              <Form.Control as="select" 
+            </Form.Control> :
+            /* customs' select */
+            <Form.Control as="select" 
               value={customizedOption.select}
               style={{width:'50%'}}
               onChange={handleSelection}
-              className={"ml-4 mt-1"}
-         
-              >
+              className={"ml-4 mt-1"}>
+
               {customizedOptions.map(o => (
                 <option className={"p-4 m-4"}value={o.value}>{o.label}</option>
               ))}
             </Form.Control>  }       
           </div>
-     
+
+          {/* template message box */}      
           { customizedOption.value===null || mode==="template"?
           <></>:
            <div className={"p-2 bg-light rounded row m-5 justify-content-center"}>       
@@ -135,8 +138,8 @@ const CustomizedMessage =(props)=>{
                 </div> 
             </div>}
              
+             {/* customized message box */}
             {selectedOption.value===null || mode ==="customized"?
-
             <></>:
             <div className={"p-2 bg-light rounded row m-5 justify-content-center"}>
               <CopyToClipboard text={selectedOption.value} onCopy={()=>setCopied(true)}>
