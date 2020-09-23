@@ -12,14 +12,15 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons';
 const CustomizedMessage =(props)=>{
 
   const options=optionMessages;
-
+ 
     const[datosCliente, setDatosCliente]=useState({
         nombre:'',
         dia:'',
         hora:'',
         monto:''
-      });
-    
+      });  
+
+     const customizedOptions=[]
       const handleChange=(event)=>{
         setDatosCliente({
           ...datosCliente,
@@ -51,6 +52,7 @@ const CustomizedMessage =(props)=>{
     }     
 
     const [selectedOption, setSelectedOption] = useState({value:options.value});
+    const[customizedOption, setCustomizedOption]=useState({value:options.value})
 
     const handleSelection=(e)=>{
       setSelectedOption({
@@ -59,12 +61,11 @@ const CustomizedMessage =(props)=>{
       console.log(selectedOption);
     }
 
-    const[mode,setMode]=useState('');
 
+    const [mode,setMode]=useState('template');
 
         return (
           <div style={{witdh:'20vw'}}>
-        
             <Form className={"p-4 row m-4 bg-light rounded"} >
               <div className={"row pl-2  ml-2"}>
                 <Form.Label >Cliente</Form.Label>
@@ -84,17 +85,18 @@ const CustomizedMessage =(props)=>{
               </div>
               </Form>
 
-              <div className={""}>
+              <div className={"p-4 row ml-4 mb-4 mr-4 mt-1 bg-light rounded"} >
               <ToggleButtonGroup  className={"bg-dark"}type="checkbox" value={[1, 2]} className="mb-2">
-                <ToggleButton value={1}>Plantilla</ToggleButton>
-                <ToggleButton value={2}>Personalizado</ToggleButton>
+                <ToggleButton onClick={()=>setMode('template')}value={1}>Plantilla</ToggleButton>
+                <ToggleButton onClick={()=>setMode('customized')} value={2}>Personalizado</ToggleButton>
               </ToggleButtonGroup>
              </div>
+             {console.log(mode)}
 
-          <div className={"bg-primary text-white m-4 rounded p-4 row"}>
+          <div className={"bg-primary text-white m-4  rounded p-4 row"}>
             <Navbar.Brand>Trámite</Navbar.Brand>
-              <Form.Control as="select" 
-                value={selectedOption}
+           {  mode==='template'? <Form.Control as="select" 
+                value={selectedOption.select}
                 style={{width:'50%'}}
                 onChange={handleSelection}
                 className={"ml-4 mt-1"}
@@ -103,26 +105,38 @@ const CustomizedMessage =(props)=>{
                 {options.map(o => (
                   <option className={"p-4 m-4"}value={o.value}>{o.label}</option>
                 ))}
-              </Form.Control>         
+              </Form.Control> :
+
+              <Form.Control as="select" 
+              value={customizedOption.select}
+              style={{width:'50%'}}
+              onChange={handleSelection}
+              className={"ml-4 mt-1"}
+         
+              >
+              {customizedOptions.map(o => (
+                <option className={"p-4 m-4"}value={o.value}>{o.label}</option>
+              ))}
+            </Form.Control>  }       
           </div>
      
-            <div className={"row p-2 justify-content-center bg-light m-5 rounded"}>       
+          { customizedOption.value===null || mode==="template"?
+          <></>:
+           <div className={"p-2 bg-light rounded row m-5 justify-content-center"}>       
                 <div id="parrafo" name="parrafo" value={parrafo} onClick={handleCopy} >
                 <CopyToClipboard text={parrafo.parrafo} onCopy={()=>setCopied(true)}>
                    <Button className={"btn btn-secondary ml-3"} type="success">
                   <FontAwesomeIcon icon={faCopy} />
                    </Button>
                 </CopyToClipboard>  
-                 <p className={"pt-3 text-justify"} > 
-                     Estimado <strong>{datosCliente.nombre}</strong>:
-                     Tiene agendado un turno para el día <strong>{datosCliente.dia}</strong> a las <strong>{datosCliente.hora}</strong> hs,
-                     en la Sucursal ICBC-Flores. ¿Es correcto?
-                  </p>
+                <div className={"pt-2"}>
+
+               </div>
                 </div> 
-     
-            </div>
+            </div>}
              
-            {selectedOption.value==null?
+            {selectedOption.value===null || mode ==="customized"?
+
             <></>:
             <div className={"p-2 bg-light rounded row m-5 justify-content-center"}>
               <CopyToClipboard text={selectedOption.value} onCopy={()=>setCopied(true)}>
@@ -133,7 +147,6 @@ const CustomizedMessage =(props)=>{
               <div className={"pt-2"}>
                 <p className={"p-1 text-justify"}>{selectedOption.value}</p>
               </div>
-              
             </div> }
           </div>         
     )
