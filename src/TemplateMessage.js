@@ -41,7 +41,7 @@ const TemplateMessage=(props)=>{
               <div className={"pt-2"}>
                 <p>{selectedOption.value}</p>
               </div>
-              <CopyToClipboard text={selectedOption.value} onCopy={()=>setCopied(true)}>
+              <CopyToClipboard  className={"justify-content-center"} text={selectedOption.value} onCopy={()=>setCopied(true)}>
                 <Button className={"btn btn-success ml-3"} type="success">
                   Copy
                 </Button>
