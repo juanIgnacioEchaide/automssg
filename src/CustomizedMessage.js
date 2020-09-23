@@ -1,14 +1,19 @@
 import React, {useState} from 'react';
-import {Form} from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import {Form} from 'react-bootstrap';
+import Navbar from 'react-bootstrap/Navbar';
 
 const CustomizedMessage =(props)=>{
 
+  const options=[
+    
+  ]
     const[datosCliente, setDatosCliente]=useState({
         nombre:'',
         dia:'',
-        hora:''
+        hora:'',
+        monto:''
       });
     
       const handleChange=(event)=>{
@@ -40,18 +45,51 @@ const CustomizedMessage =(props)=>{
         )
         console.log(parrafo)
     }     
+
+    const [selectedOption, setSelectedOption] = useState({value:options.value});
+
+    const handleSelection=(e)=>{
+      setSelectedOption({
+        ...options.value,
+        value:e.target.value});
+      console.log(selectedOption);
+    }
         return (
           <div style={{witdh:'20vw'}}>
-              <div>
-             </div>   
-            <Form className={"p-4 row m-4"} >
-              <Form.Label >Cliente</Form.Label>
-              <Form.Control  name="nombre" type="text" placeholder="Cliente" onChange={handleChange}/>
-              <Form.Label>Día Turno</Form.Label>
+          
+            <Form className={"p-4 row m-4 bg-light rounded"} >
+              <div className={"row pl-2  ml-2"}>
+                <Form.Label >Cliente</Form.Label>
+                <Form.Control name="nombre" type="text" placeholder="Cliente" onChange={handleChange}/>
+              </div>
+             <div className={"row  pl-2 ml-2"}>
+               <Form.Label>Día Turno</Form.Label>
               <Form.Control  name="dia" type="text"  placeholder="Día Turno" onChange={handleChange}/>
-              <Form.Label>Hora Turno</Form.Label>
-              <Form.Control name="hora" type="text"  placeholder="Hora Turno" onChange={handleChange}/>     
-          </Form>
+             </div>
+              <div className={"row pl-2  ml-2"}>
+                <Form.Label>Hora Turno</Form.Label>
+                <Form.Control name="hora" type="text"  placeholder="Hora Turno" onChange={handleChange}/>     
+              </div>
+              <div className={"row pl-2  ml-2"}>
+                <Form.Label>Monto</Form.Label>
+                <Form.Control name="hora" type="text"  placeholder="Monto" onChange={handleChange}/>     
+              </div>
+              </Form>
+          <div className={"bg-primary text-white m-4 rounded p-4 row"}>
+            <Navbar.Brand>Trámite</Navbar.Brand>
+              <Form.Control as="select" 
+                value={selectedOption}
+                style={{width:'50%'}}
+                onChange={handleSelection}
+                className={"ml-4 mt-1"}
+                display={selectedOption}
+                >
+                {options.map(o => (
+                  <option className={"p-4 m-4"}value={o.value}>{o.label}</option>
+                ))}
+              </Form.Control>
+          </div>
+   
             <div className={"row p-3 justify-content-center bg-light m-5 rounded"}>
               <div id="parrafo" name="parrafo" value={parrafo} onClick={handleCopy} >
               <p className={"pt-3"} > 

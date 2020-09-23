@@ -1,22 +1,22 @@
-import {Navbar} from 'react-bootstrap/Navbar';
+
 import React, {useState} from 'react';
+import {Navbar,Nav,Button,Form, FormControl} from 'react-bootstrap';
+import {Link } from 'react-router-dom';
 
-const Navbar=(props)=>{
+const NavBar =(props)=>{
+return(
+    <>
 
-    return(
-        <div>
-        <Navbar bg="light" expand="lg">
-            <Navbar.Brand href="#home">AutoMessage</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
-                <Nav.Link href="#home">Home</Nav.Link>
-                <Nav.Link href="#link">Link</Nav.Link>  
-                </Nav>
-            </Navbar.Collapse>
-        </Navbar>
-    </div>
-    )
-}
+  <Navbar bg="primary" variant="dark">
+    <Navbar.Brand href="#home">AutoMssg</Navbar.Brand>
+    <Nav className="mr-auto">
+      <Nav.Link as={Link} to="/personalizado" href="#home">Personalizado</Nav.Link>
+      <Nav.Link as={Link} to="/plantilla">Plantilla</Nav.Link>
+    </Nav>
+  </Navbar>
 
-export default Navbar;
+ 
+    </>
+    );
+};
+export default NavBar;

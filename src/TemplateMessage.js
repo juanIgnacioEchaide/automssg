@@ -3,15 +3,13 @@ import React, {useState} from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Button from 'react-bootstrap/Button';
 import {Form} from 'react-bootstrap';
-
+import Navbar from 'react-bootstrap/Navbar';
+import {optionMessages} from '../src/data/optionMessages'
 
 const TemplateMessage=(props)=>{
 
-    const options=[
-      {label:'selecciona trámite', value:''},
-      {label:'cancelación turno', value:'Si desea cancelar su turno...'},
-      {label:'extracción dolares', value:'Si desea extraer dolares...'}
-    ]
+    const options=optionMessages;
+
     const [selectedOption, setSelectedOption] = useState({value:options.value});
 
     const handleSelection=(e)=>{
@@ -23,13 +21,14 @@ const TemplateMessage=(props)=>{
     const[copied,setCopied]=useState(false);
     return (
       <div> 
-        <div className={"bg-secondary text-white m-4 rounded p-4 row"}>
-          <h2>Trámite</h2>  
+        <div className={"bg-primary text-white m-4 rounded p-4 row"}>
+        <Navbar.Brand>Trámite</Navbar.Brand>
           <Form.Control as="select" 
           value={selectedOption}
           style={{width:'50%'}}
           onChange={handleSelection}
           className={"ml-4 mt-1"}
+          display={selectedOption}
           >
           {options.map(o => (
             <option className={"p-4 m-4"}value={o.value}>{o.label}</option>
@@ -38,7 +37,7 @@ const TemplateMessage=(props)=>{
         </div>
             {selectedOption.value==null?
             <></>:
-            <div className={"bg-light rounded row justify-content-center"}>
+            <div className={"bg-light rounded row justify-content-center m-5"}>
               <div className={"pt-2"}>
                 <p>{selectedOption.value}</p>
               </div>
