@@ -4,6 +4,7 @@ import {Switch,Route} from 'react-router-dom';
 import './App.css';
 import messageScreen from './messageScreen';
 import  NavBar from './Navbar';
+import LoginForm from './LoginForm';
 
 function App() {
 
@@ -11,7 +12,7 @@ function App() {
     <div className="App">
     <Route path="" component={NavBar}></Route>
     <Switch>
-    
+      <Route path="/LogIn" component={LoginForm}></Route>
       <Route path="/personalizado" component={messageScreen}></Route>
     </Switch>
 

@@ -1,32 +1,30 @@
 import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
-import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
-import ToggleButton from 'react-bootstrap/ToggleButton';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import {Form} from 'react-bootstrap';
 import Navbar from 'react-bootstrap/Navbar';
 import {optionMessages} from '../src/data/optionMessages';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import InputClientData from './UI/InputClientData'
+import MssgSelect from './UI/MssgSelect';
+import ModeToggle from './UI/ModeToggle';
+import CopyCustomContainer from './UI/CopyCustomContainer';
 
 const CustomizedMessage =(props)=>{
   const options=optionMessages;
-
-    const[value,setValue]=useState('');
-    const[copied,setCopied]=useState(false);
-    const [selectedOption, setSelectedOption] = useState({value:options.value});
-
-    const[datosCliente, setDatosCliente]=useState({
-          nombre:'',
-          dia:'',
-          hora:'',
-          monto:''
-        });  
-
-    const[parrafo, setParrafo]=useState({
-      parrafo:''
-    });
-    const [mode,setMode]=useState('template');
+  const[value,setValue]=useState('');
+  const[copied,setCopied]=useState(false);
+  const [selectedOption, setSelectedOption] = useState({value:options.value});
+  const[datosCliente, setDatosCliente]=useState({
+        nombre:'',
+        dia:'',
+        hora:'',
+        monto:''
+      });  
+  const[parrafo, setParrafo]=useState({
+    parrafo:''
+  });
+  const [mode,setMode]=useState('template');
     
     const early_today =<p className={"text-justify p-2"}> {datosCliente.nombre} espero te encuentres bien. Mi nombre es Yveline Chen, 
     oficial exclusive del ICBC, sucursal Flores.
@@ -63,13 +61,14 @@ const CustomizedMessage =(props)=>{
       {id:3,label:'pp preacordado',value:pp_preacordado},
       {id:4,label:'turno mañana',value:tommorrow_morning}]
 
-   const customOptions=[
-     {id:1,label:'turno esta mañana'},
-     {id:2,label:'turno esta tarde'},
-     {id:3,label:'pp preacordado'}, 
-     {id:4,label:'turno mañana'},
-    ];
-   const[customizedOption, setCustomizedOption]=useState({value:customOptions.value})
+  const customOptions=[
+    {id:1,label:'turno esta mañana'},
+    {id:2,label:'turno esta tarde'},
+    {id:3,label:'pp preacordado'}, 
+    {id:4,label:'turno mañana'},
+  ];
+  
+  const[customizedOption, setCustomizedOption]=useState({value:customOptions.value})
   
   const handleChange=(event)=>{
     setDatosCliente({
@@ -106,73 +105,29 @@ const CustomizedMessage =(props)=>{
   }
         return (
           <div style={{witdh:'20vw'}}>
-
           {/* user's inputs */}
           {mode ==="customized"?
-            <Form className={"p-4 row m-4 bg-light rounded"} >
-              <div className={"row pl-2  ml-2"}>
-                <Form.Label >Cliente</Form.Label>
-                <Form.Control name="nombre" type="text" placeholder="Cliente" onChange={handleChange}/>
-              </div>
-             <div className={"row  pl-2 ml-2"}>
-               <Form.Label>Día Turno</Form.Label>
-              <Form.Control  name="dia" type="text"  placeholder="Día Turno" onChange={handleChange}/>
-             </div>
-              <div className={"row pl-2  ml-2"}>
-                <Form.Label>Hora Turno</Form.Label>
-                <Form.Control name="hora" type="text"  placeholder="Hora Turno" onChange={handleChange}/>     
-              </div>
-              <div className={"row pl-2  ml-2"}>
-                <Form.Label>Monto</Form.Label>
-                <Form.Control name="hora" type="text"  placeholder="Monto" onChange={handleChange}/>     
-              </div>
-              </Form>:
+           <InputClientData handleChange={handleChange}/>:
               <></>}
-
           {/* mode toggle */}
-              <div className={"p-4 row ml-4 mb-4 mr-4 mt-1 bg-light rounded"} >
-              <ToggleButtonGroup  className={"bg-dark mb-2 rounded"}type="checkbox" value={[1, 2]}>
-                <ToggleButton onClick={()=>setMode('template')}value={1}>Plantilla</ToggleButton>
-                <ToggleButton onClick={()=>setMode('customized')} value={2}>Personalizado</ToggleButton>
-              </ToggleButtonGroup>
-             </div>
-      
+          <ModeToggle setMode={setMode}/>   
           {/* selects */}
           <div className={"bg-primary text-white m-4  rounded p-4 row"}>
-            <Navbar.Brand>Plantillas</Navbar.Brand>
-           {  mode==='template'? 
-           /* template's select */
-           <Form.Control as="select" 
-                value={selectedOption.select}
-                style={{width:'50%'}}
-                onChange={handleSelection}
-                className={"ml-4 mt-1"}
-                display={selectedOption}>
+              <Navbar.Brand>Plantillas</Navbar.Brand>
+              {  mode==='template'? 
+              /* template's select */
+              <MssgSelect options={options} 
+                            handleSelection={handleSelection} 
+                            selectedOption={selectedOption}/>:
 
-                {options.map(o => (
-                  <option className={"p-4 m-4"}value={o.value}>{o.label}</option>
-                ))}
-            </Form.Control> :
-
-            /* customs' select */
-            <Form.Control as="select" 
-              value={customOptions.select}
-              style={{width:'50%'}}
-             onChange={handleCustomizedSelection}
-              className={"ml-4 mt-1"}
-              display={customOptions}>
- 
-              {customOptions.map(o => (
-                <option className={"p-4 m-4"}value={o.value}>{o.label}</option>
-              ))}           
-            </Form.Control>  }       
-          </div>
-
-      
-             
+              <MssgSelect options={customOptions} 
+                            handleSelection={handleCustomizedSelection} 
+                            selectedOption={selectedOption}/>}       
+            </div>
+   
              {/*  template message box */}
-            {mode ==="customized"?
-            <></>:
+            {mode ==="template"?
+          
             <div className={"p-2 bg-light rounded row m-5 justify-content-center"}>
               <CopyToClipboard text={selectedOption.value} onCopy={()=>setCopied(true)}>
                 <Button className={"btn btn-secondary ml-3 float-right"} type="success">
@@ -182,27 +137,17 @@ const CustomizedMessage =(props)=>{
               <div className={"pt-2"}>
                 <p className={"p-1 text-justify"}>{selectedOption.value}</p>
               </div>
-            </div> }
+            </div>:<></> }
 
-            {/* customized message box */}   
-              
-            {mode ==="customized"?
-              <>
-             
-               <> { customizedValues.map(i=> i.label===customizedOption.label ?
-                      <div id="parrafo" name="parrafo" value={parrafo} onClick={handleCopy}>
-                         <h6 >{customizedOption.label}</h6>
-                      <CopyToClipboard text={parrafo.parrafo} onCopy={()=>setCopied(true)}>
-                        <Button className={"btn btn-secondary ml-3"} type="success">
-                        <FontAwesomeIcon icon={faCopy} />
-                        </Button>
-                      </CopyToClipboard>  
-                      <div className={"pt-2"}>
-                    <p className={"p-1 text-justify"}>{i.value}</p>
-                  </div>         
-                </div>:
-                    <></>
-               )}</>
+            {/* customized message box */}               
+            {mode ==="customized"?  
+              <> { customizedValues.map(i=> i.label===customizedOption.label ?
+                   <CopyCustomContainer handleCopy={handleCopy}
+                                        setCopied={setCopied}
+                                        customizedOption={customizedOption}
+                                        parrafo={parrafo}
+                                        i={i}/>:
+                <></>)}
              </>:
             <></>}
           </div>         
