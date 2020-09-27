@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import {Switch,Route} from 'react-router-dom';
 import './App.css';
-import CustomizedMessage from './CustomizedMessage';
+import messageScreen from './messageScreen';
 import  NavBar from './Navbar';
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
     <Route path="" component={NavBar}></Route>
     <Switch>
     
-      <Route path="/personalizado" component={CustomizedMessage}></Route>
+      <Route path="/personalizado" component={messageScreen}></Route>
     </Switch>
 
     </div>
