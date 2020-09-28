@@ -19,7 +19,7 @@ const InputClientData=(props)=>{
         </div>
         <div className={"row pl-2  ml-2"}>
             <Form.Label>Monto</Form.Label>
-            <Form.Control name="hora" type="text"  placeholder="Monto" onChange={props.handleChange}/>     
+            <Form.Control name="monto" type="text"  placeholder="Monto" onChange={props.handleChange}/>     
         </div>
       </Form>
     </>)
