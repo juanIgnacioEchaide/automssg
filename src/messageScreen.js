@@ -1,16 +1,13 @@
 import React, {useState} from 'react';
-import Button from 'react-bootstrap/Button';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Navbar from 'react-bootstrap/Navbar';
 import {optionMessages} from '../src/data/optionMessages';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import InputClientData from './UI/InputClientData'
 import MssgSelect from './UI/MssgSelect';
 import ModeToggle from './UI/ModeToggle';
 import CopyCustomContainer from './UI/CopyCustomContainer';
 import CopyTemplateContainer from './UI/CopyTemplateContainer';
 import useCustomizedValues from './data/useCustomizedValues';
+import ClientNavigator from './UI/ClientNavigator';
 
 const CustomizedMessage =(props)=>{
   const options=optionMessages;
@@ -27,10 +24,8 @@ const CustomizedMessage =(props)=>{
     parrafo:''
   });
   const [mode,setMode]=useState('template');
-    
   const customizedValues=useCustomizedValues(datosCliente).customizedValues;
   const customOptions=useCustomizedValues(datosCliente).customOptions;
-  
   const[customizedOption, setCustomizedOption]=useState({value:customOptions.value})
   
   const handleChange=(event)=>{
@@ -69,7 +64,8 @@ const CustomizedMessage =(props)=>{
         return (
           <div style={{witdh:'20vw'}}>
             {mode ==="customized"?
-            <InputClientData handleChange={handleChange}/>:<></>}
+            <><ClientNavigator/>
+            <InputClientData handleChange={handleChange}/></>:<></>}
 
             <ModeToggle setMode={setMode}/>   
 
@@ -92,12 +88,14 @@ const CustomizedMessage =(props)=>{
                                     />:<></> }
           
               {mode ==="customized"?  
-                <> { customizedValues.map(i=> i.label===customizedOption.label ?
+                <> 
+                { customizedValues.map(i=> i.label===customizedOption.label ?
                     <CopyCustomContainer handleCopy={handleCopy}
                                           setCopied={setCopied}
                                           customizedOption={customizedOption}
                                           parrafo={parrafo}
                                           i={i}/>:<></>)}
+                    
               </>:<></>}
           </div>         
     )

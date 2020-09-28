@@ -10,7 +10,6 @@ const CopyCustomContainer=(props)=>{
 
 return(   
         <div id="parrafo" name="parrafo" value={props.parrafo} onClick={props.handleCopy}>
-            <h6 >{props.customizedOption.label}</h6>
                 <CopyToClipboard text={props.parrafo.parrafo} onCopy={()=>props.setCopied(true)}>
                     <Button className={"btn btn-secondary ml-3"} type="success">
                     <FontAwesomeIcon icon={faCopy} />
