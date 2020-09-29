@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import {optionMessages} from '../src/data/optionMessages';
 import InputClientData from './UI/InputClientData'
@@ -8,8 +8,21 @@ import CopyCustomContainer from './UI/CopyCustomContainer';
 import CopyTemplateContainer from './UI/CopyTemplateContainer';
 import useCustomizedValues from './data/useCustomizedValues';
 import ClientNavigator from './UI/ClientNavigator';
+import {csv} from 'd3';
+import file from './data/data.csv'
 
 const CustomizedMessage =(props)=>{
+
+  const[dataCsv,setDataCsv]=useState([]);
+
+  useEffect(()=>{
+      csv(file)
+          .then( data=> setDataCsv(data)); 
+  }
+  ,[]);
+
+  console.log(dataCsv)
+
   const options=optionMessages;
   const[value,setValue]=useState('');
   const[copied,setCopied]=useState(false);
@@ -64,7 +77,7 @@ const CustomizedMessage =(props)=>{
         return (
           <div style={{witdh:'20vw'}}>
             {mode ==="customized"?
-            <><ClientNavigator/>
+            <><ClientNavigator lassName={"m-5 p-5"} datosCliente={dataCsv}/>
             <InputClientData handleChange={handleChange}/></>:<></>}
 
             <ModeToggle setMode={setMode}/>   
