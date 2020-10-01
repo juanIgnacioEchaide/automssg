@@ -4,24 +4,16 @@ import {optionMessages} from '../src/data/optionMessages';
 import InputClientData from './UI/InputClientData'
 import MssgSelect from './UI/MssgSelect';
 import ModeToggle from './UI/ModeToggle';
+import CustomizedModeToggle from './UI/CustomizedModeToggle';
 import CopyCustomContainer from './UI/CopyCustomContainer';
 import CopyTemplateContainer from './UI/CopyTemplateContainer';
 import useCustomizedValues from './data/useCustomizedValues';
 import ClientNavigator from './UI/ClientNavigator';
 import {csv} from 'd3';
 import file from './data/data.csv'
+import Upload from './Component/Upload';
 
 const CustomizedMessage =(props)=>{
-
-  const[dataCsv,setDataCsv]=useState([]);
-
-  useEffect(()=>{
-      csv(file)
-          .then( data=> setDataCsv(data)); 
-  }
-  ,[]);
-
-  console.log(dataCsv)
 
   const options=optionMessages;
   const[value,setValue]=useState('');
@@ -33,10 +25,19 @@ const CustomizedMessage =(props)=>{
         hora:'',
         monto:''
       });  
+  const[dataCsv,setDataCsv]=useState([]);
+
+  useEffect(()=>{
+      csv(file)
+          .then( data=> setDataCsv(data))
+    }
+  ,[]);
+
   const[parrafo, setParrafo]=useState({
     parrafo:''
   });
   const [mode,setMode]=useState('template');
+  const [customizedMode,setCustomizedMode]=useState('customManual');
   const customizedValues=useCustomizedValues(datosCliente).customizedValues;
   const customOptions=useCustomizedValues(datosCliente).customOptions;
   const[customizedOption, setCustomizedOption]=useState({value:customOptions.value})
@@ -76,11 +77,18 @@ const CustomizedMessage =(props)=>{
   }
         return (
           <div style={{witdh:'20vw'}}>
+            
+          <ModeToggle setMode={setMode}/>   
             {mode ==="customized"?
-            <><ClientNavigator lassName={"m-5 p-5"} datosCliente={dataCsv}/>
-            <InputClientData handleChange={handleChange}/></>:<></>}
+            <CustomizedModeToggle setCustomizedMode={setCustomizedMode}/>
+            :<></>}
 
-            <ModeToggle setMode={setMode}/>   
+            {customizedMode==="customizedFile"?
+            <> <Upload/>
+            <ClientNavigator lassName={"m-5 p-5"} datosCliente={dataCsv}/>
+           
+            </>:
+            <InputClientData handleChange={handleChange}/>}
 
             <div className={"bg-primary text-white m-4  rounded p-4 row"}>
                 <Navbar.Brand>Plantillas</Navbar.Brand>
