@@ -7,9 +7,9 @@ import Button from 'react-bootstrap/Button';
 
 const UploadComponent=(props)=>{
     const fileInputRef = React.createRef();
-    const[file,setFile]=useState();
+    const [clients,setClients]=useState([]);
     const [csvFile, setCsvFile]=useState();
-    const rawClientRows=[]
+
     const onFilesAdded=(evt)=>{
         const reader = new FileReader();
         let file = evt.target.files[0];
@@ -27,31 +27,30 @@ const UploadComponent=(props)=>{
     }
 
 
-    const parseFile=()=>{
-        
+    const parseFile=()=>{     
         const clientObjects=[]
         let file= localStorage.getItem('csv_file');
-        let rawParsedFile = file.split('"\r\n\"');
+        let row = file.split('"\r\n\"');
+        let rowItems = row.map(i=>{
 
-        rawParsedFile.map(i =>{
-            let j = JSON.stringify(i)
-            rawClientRows.push(j);     
-          });
-        
-        rawClientRows.map( i =>{
-            let fragment = i.split('" "');
-            console.log(fragment);
-            //hearing date
-            let dateTime =i.slice(56,72);
-            let dateTimeArray = dateTime.split(" ");
-
-            clientObjects.push({
-                date:dateTimeArray[0],
-                time:dateTimeArray[1],
-            })    
-
-          });
+            let j = i.split('"\t\"');
+            let k = j[2].split(" ");
+            clientObjects.push(
+                {
+                    date:k[0],
+                    time: k[1],
+                    firstName: j[6], 
+                    lastName: j[5], 
+                    id:j[8],
+                    email:j[11],
+                    employer:j[10]
+                    }
+                ) 
+            });
+        clientObjects.shift();
+        setClients(clientObjects);
         }
+        console.log(clients);
 
     const openFileDialog=()=>{
         if(props.disabled) return;
@@ -60,17 +59,16 @@ const UploadComponent=(props)=>{
 
        return(
     <>
-        <div>
-     
+     <div>  
         <FontAwesomeIcon icon={faUpload} />
-        <input
-        ref={fileInputRef}
-        type={"file"}
-        multiple
-        onChange={onFilesAdded}
-        />
-           {rawClientRows.map( i=> <p>{i}</p>)}
-        <Button text="ok"onClick={parseFile}/>
+            <input
+            ref={fileInputRef}
+            type={"file"}
+            multiple
+            onChange={onFilesAdded}
+            />
+         
+             <Button text="ok"onClick={parseFile}/>
     </div>
     </>)
 }
