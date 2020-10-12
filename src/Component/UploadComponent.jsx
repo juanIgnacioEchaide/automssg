@@ -49,6 +49,7 @@ const UploadComponent=(props)=>{
             });
         clientObjects.shift();
         setClients(clientObjects);
+        localStorage.setItem('client_objs',JSON.stringify(clientObjects));
         }
         console.log(clients);
 
