@@ -8,10 +8,11 @@ import CustomizedModeToggle from './UI/CustomizedModeToggle';
 import CopyCustomContainer from './UI/CopyCustomContainer';
 import CopyTemplateContainer from './UI/CopyTemplateContainer';
 import useCustomizedValues from './data/useCustomizedValues';
+import useTemplateValues from './data/useTemplateValues';
 import ClientNavigator from './UI/ClientNavigator';
 import {csv} from 'd3';
 import file from './data/data.csv'
-import Upload from './Component/Upload';
+import UploadComponent from './Component/UploadComponent';
 
 const CustomizedMessage =(props)=>{
 
@@ -75,16 +76,23 @@ const CustomizedMessage =(props)=>{
       label:e.target.value
     });
   }
+
+  const array=[
+    {id:1,texto:'la garlompa //n es garlompera'},
+    {id:2,texto:'la garlompa2 /n baila'},
+    {id:3,texto:'la garlompa3/n es mi amiga'},
+]
+
         return (
           <div style={{witdh:'20vw'}}>
-            
+            <UploadComponent></UploadComponent>
           <ModeToggle setMode={setMode}/>   
             {mode ==="customized"?
             <CustomizedModeToggle setCustomizedMode={setCustomizedMode}/>
             :<></>}
-
+           
             {customizedMode==="customizedFile"?
-            <> <Upload/>
+            <> 
             <ClientNavigator lassName={"m-5 p-5"} datosCliente={dataCsv}/>
            
             </>:
@@ -102,7 +110,9 @@ const CustomizedMessage =(props)=>{
                               handleSelection={handleCustomizedSelection} 
                               selectedOption={selectedOption}/>}       
               </div>
-   
+          {
+
+              array.map(i=><p>{i.texto}</p>)}
               {mode ==="template"?          
               <CopyTemplateContainer setCopied={setCopied} 
                                     selectedOption={selectedOption}
