@@ -1,6 +1,6 @@
 import React, {useState,useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload,faCopy } from '@fortawesome/free-solid-svg-icons';
+import { faUpload,faCopy, faArrowAltCircleLeft, faArrowAltCircleRight } from '@fortawesome/free-solid-svg-icons';
 import {CSVReader} from 'react-papaparse';
 import {csv} from 'd3';
 import Button from 'react-bootstrap/Button';
@@ -60,13 +60,25 @@ const UploadComponent=(props)=>{
             hora:clientObjects[index].time
         })
         }
- 
 
     const openFileDialog=()=>{
         if(props.disabled) return;
         fileInputRef.current.click();
     }
-
+    const decrementIndex=()=>{
+        if(index!=0){
+            setIndex(index-1);
+        }else{
+            console.log("no hay más")
+        }
+    }
+    const incrementIndex=()=>{
+        if(index<clients.length){
+            setIndex(index+1);
+        }else{
+            console.log("no hay más")
+        }
+    }
 
        return(
     <>
@@ -84,7 +96,12 @@ const UploadComponent=(props)=>{
              {clients.map(i=> clients.indexOf(i)===index ?
                     
                      <>
-                            <div className={"bg-primary text-white m-4 p-2 w-5 rounded column justify-content-center"}>
+                    
+                            <div className={"bg-primary text-white m-4 p-2 w-5 row rounded justify-content-center"}>
+                            <div  className={"mt-4 p-5"}>
+                                <Button onClick={decrementIndex}><FontAwesomeIcon size="4x" icon={faArrowAltCircleLeft}/></Button>
+                            </div>
+                            <div className={"p-2 col-6 justify-content-center"}>
                                 <div className={"row pl-2"}>
                                     <CopyToClipboard>
                                                 <Button><FontAwesomeIcon color={"cyan"} icon={faCopy}/></Button>
@@ -120,7 +137,10 @@ const UploadComponent=(props)=>{
                                     </CopyToClipboard>
                                     <label className={"mr-2 ml-2"}>Empleador:</label><p className={"mr-2 ml-2"}>{i.employer}</p>
                                 </div>
-                               
+                                </div>
+                                <div className={"mt-4 p-5 justify-content-center"}>
+                                    <Button onClick={incrementIndex}><FontAwesomeIcon size="4x" icon={faArrowAltCircleRight}/></Button>
+                                </div>
                             </div>
                     </>
                       :<></>)}
