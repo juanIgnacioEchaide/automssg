@@ -1,11 +1,14 @@
 import React, {useState,useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faUpload,faCopy } from '@fortawesome/free-solid-svg-icons';
 import {CSVReader} from 'react-papaparse';
 import {csv} from 'd3';
 import Button from 'react-bootstrap/Button';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import ClientNavigator from '../UI/ClientNavigator'
 
 const UploadComponent=(props)=>{
+    const setDatosCliente = props.setDatosCliente;
     const fileInputRef = React.createRef();
     const [clients,setClients]=useState([]);
     const [csvFile, setCsvFile]=useState();
@@ -26,7 +29,7 @@ const UploadComponent=(props)=>{
      }  
     }
 
-
+    const[index,setIndex]=useState(0);
     const parseFile=()=>{     
         const clientObjects=[]
         let file= localStorage.getItem('csv_file');
@@ -37,6 +40,7 @@ const UploadComponent=(props)=>{
             let k = j[2].split(" ");
             clientObjects.push(
                 {
+                    
                     date:k[0],
                     time: k[1],
                     firstName: j[6], 
@@ -50,13 +54,19 @@ const UploadComponent=(props)=>{
         clientObjects.shift();
         setClients(clientObjects);
         localStorage.setItem('client_objs',JSON.stringify(clientObjects));
+        setDatosCliente({
+            nombre:clientObjects[index].firstName+' '+clientObjects[index].lastName,
+            dia:clientObjects[index].date,
+            hora:clientObjects[index].time
+        })
         }
-        console.log(clients);
+ 
 
     const openFileDialog=()=>{
         if(props.disabled) return;
         fileInputRef.current.click();
     }
+
 
        return(
     <>
@@ -69,7 +79,53 @@ const UploadComponent=(props)=>{
             onChange={onFilesAdded}
             />
          
-             <Button text="ok"onClick={parseFile}/>
+             <Button text="ok"onClick={parseFile}>OK</Button>
+          
+             {clients.map(i=> clients.indexOf(i)===index ?
+                    
+                     <>
+                            <div className={"bg-primary text-white m-4 p-2 w-5 rounded column justify-content-center"}>
+                                <div className={"row pl-2"}>
+                                    <CopyToClipboard>
+                                                <Button><FontAwesomeIcon color={"cyan"} icon={faCopy}/></Button>
+                                    </CopyToClipboard>
+                                    <label className={"mr-2 ml-2"}>DNI:</label><p className={"mr-2 ml-2"}>{i.id}</p>
+                                        <CopyToClipboard>
+                                            <Button><FontAwesomeIcon color={"cyan"} icon={faCopy}/></Button>
+                                        </CopyToClipboard>
+                                    <label className={"mr-2 ml-2"}>E-mail:</label><p className={"mr-2 ml-2"}>{i.email}</p>
+                                        
+                                </div>
+                                <div  className={"row pl-2"}>
+                                    <CopyToClipboard>
+                                        <Button className="pb-2"><FontAwesomeIcon color={"cyan"} icon={faCopy}/></Button>
+                                    </CopyToClipboard>
+                                    <label className={"mr-2 ml-2"}>Nombre:</label><p className={"mr-2 ml-2"}>{i.firstName} {i.lastName}</p>
+                                   
+                                </div>  
+                                <div  className={"row pl-2"}>
+                                    <CopyToClipboard>
+                                        <Button><FontAwesomeIcon color={"cyan"} icon={faCopy}/></Button>
+                                    </CopyToClipboard>
+                                    <label className={"mr-2 ml-2"}>Fecha turno:</label><p className={"mr-2 ml-2"}>{i.date}</p>    
+                                     <CopyToClipboard>
+                                        <Button><FontAwesomeIcon  color={"cyan"} icon={faCopy}/></Button>
+                                    </CopyToClipboard>
+                                    <label className={"mr-2 ml-2"}>Horario turno:</label><p className={"mr-2 ml-2"}>{i.time} hs</p>
+                                   
+                                </div> 
+                                <div  className={"row pl-2"}>
+                                    <CopyToClipboard>
+                                        <Button><FontAwesomeIcon color={"cyan"}  icon={faCopy}/></Button>
+                                    </CopyToClipboard>
+                                    <label className={"mr-2 ml-2"}>Empleador:</label><p className={"mr-2 ml-2"}>{i.employer}</p>
+                                </div>
+                               
+                            </div>
+                    </>
+                      :<></>)}
+                        
+      
     </div>
     </>)
 }

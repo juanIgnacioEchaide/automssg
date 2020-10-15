@@ -25,7 +25,9 @@ const CustomizedMessage =(props)=>{
         dia:'',
         hora:'',
         monto:''
-      });  
+      }); 
+      
+      
   const[dataCsv,setDataCsv]=useState([]);
 
   useEffect(()=>{
@@ -37,10 +39,10 @@ const CustomizedMessage =(props)=>{
   const[parrafo, setParrafo]=useState({
     parrafo:''
   });
-  const [mode,setMode]=useState('template');
+  const [mode,setMode] = useState('template');
   const [customizedMode,setCustomizedMode]=useState('customManual');
-  const customizedValues=useCustomizedValues(datosCliente).customizedValues;
-  const customOptions=useCustomizedValues(datosCliente).customOptions;
+  const customizedValues = useCustomizedValues(datosCliente).customizedValues;
+  const customOptions = useCustomizedValues(datosCliente).customOptions;
   const[customizedOption, setCustomizedOption]=useState({value:customOptions.value})
   
   const handleChange=(event)=>{
@@ -76,25 +78,18 @@ const CustomizedMessage =(props)=>{
       label:e.target.value
     });
   }
-
-  const array=[
-    {id:1,texto:'la garlompa //n es garlompera'},
-    {id:2,texto:'la garlompa2 /n baila'},
-    {id:3,texto:'la garlompa3/n es mi amiga'},
-]
-
         return (
           <div style={{witdh:'20vw'}}>
-            <UploadComponent></UploadComponent>
-          <ModeToggle setMode={setMode}/>   
+            
+            <ModeToggle setMode={setMode}/>   
             {mode ==="customized"?
             <CustomizedModeToggle setCustomizedMode={setCustomizedMode}/>
             :<></>}
            
             {customizedMode==="customizedFile"?
             <> 
-            <ClientNavigator lassName={"m-5 p-5"} datosCliente={dataCsv}/>
-           
+              <UploadComponent setDatosCliente={setDatosCliente}/>
+         
             </>:
             <InputClientData handleChange={handleChange}/>}
 
@@ -110,9 +105,7 @@ const CustomizedMessage =(props)=>{
                               handleSelection={handleCustomizedSelection} 
                               selectedOption={selectedOption}/>}       
               </div>
-          {
 
-              array.map(i=><p>{i.texto}</p>)}
               {mode ==="template"?          
               <CopyTemplateContainer setCopied={setCopied} 
                                     selectedOption={selectedOption}
